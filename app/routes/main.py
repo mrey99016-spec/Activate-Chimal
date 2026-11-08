@@ -564,3 +564,61 @@ def comunidad():
         tipo="comunidad",
         elementos=publicaciones
     )
+
+# --- DETALLE DE CADA ESPACIO DEL TEPALCATES ---
+INFO_ESPACIOS = {
+    "Fútbol": {
+        "descripcion": "Cancha de fútbol 7 de pasto sintético, ideal para retas y torneos de la comunidad.",
+        "ubicacion": "Deportivo Tepalcates, Chimalhuacán, Edo. de México",
+        "horario": "Lunes a Domingo 8:00 am a 8:00 pm",
+        "superficie": "Pasto sintético",
+        "capacidad": "14 jugadores",
+        "servicios": "Baños, Gradas, Iluminación nocturna, Estacionamiento",
+        "reglas": "Usar tenis, no entrar con tacos de metal. Apartar con 1 día de anticipación.",
+        "foto": "img/tepalcates-futbol.jpg"
+    },
+    "Básquetbol": {
+        "descripcion": "Cancha techada con tableros profesionales para entrenar y jugar cascaritas.",
+        "ubicacion": "Deportivo Tepalcates, Chimalhuacán",
+        "horario": "Lunes a Domingo 8:00 am a 8:00 pm",
+        "superficie": "Concreto pintado",
+        "capacidad": "10 jugadores",
+        "servicios": "Techada, Baños, Bancas",
+        "reglas": "No colgarse del aro. Respetar turnos de juego.",
+        "foto": "img/tepalcates-basquet.jpg"
+    },
+    "Voleibol": {
+        "descripcion": "Cancha de voleibol con red y líneas marcadas.",
+        "ubicacion": "Deportivo Tepalcates, Chimalhuacán",
+        "horario": "Lunes a Domingo 9:00 am a 7:00 pm",
+        "superficie": "Concreto",
+        "capacidad": "12 jugadores",
+        "servicios": "Red, Baños, Gradas",
+        "reglas": "Traer tu propio balón si puedes.",
+        "foto": "img/tepalcates-volei.jpg"
+    },
+}
+
+@main.route("/cancha/<int:cancha_id>")
+def detalle_cancha(cancha_id):
+    usuario = requiere_login()
+    if usuario is None:
+        return redirect(url_for("auth.login"))
+    db = get_db()
+    cancha = db.execute(
+        "SELECT * FROM canchas WHERE id = ? AND disponible = 1",
+        (cancha_id,)
+    ).fetchone()
+    if not cancha:
+        return "Espacio no encontrado", 404
+    extra = INFO_ESPACIOS.get(cancha["deporte"], {
+        "descripcion": "Espacio deportivo del Deportivo Tepalcates.",
+        "ubicacion": "Deportivo Tepalcates, Chimalhuacán",
+        "horario": "Lunes a Domingo 8:00 am a 8:00 pm",
+        "superficie": "Aire libre",
+        "capacidad": "Variable",
+        "servicios": "Baños, Bancas",
+        "reglas": "Cuidar las instalaciones, no dejar basura.",
+        "foto": "img/tepalcates-general.jpg"
+    })
+    return render_template("detalle_cancha.html", cancha=cancha, extra=extra)
