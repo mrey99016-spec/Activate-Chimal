@@ -1,61 +1,41 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="theme-color" content="#07172f">
-    <title>{% block title %}Actívate + Chimal{% endblock %}</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/estilos.css') }}">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#07172f">
+  <title>{% block title %}Actívate Chimal{% endblock %}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/estilos.css') }}">
 </head>
 <body>
 
 <header class="navbar">
-    <a href="{{ url_for('main.index') }}" class="logo">
-        <span class="logo-icon">✦</span>
-        ACTÍVATE <span>+ CHIMAL</span>
-    </a>
+  <a href="{{ url_for('main.dashboard') }}" class="logo">
+    <span class="logo-icon">⚡</span>
+    ACTÍVATE <span>CHIMAL</span>
+  </a>
 
-    <button class="menu-toggle" id="menu-toggle" aria-label="Abrir menú">☰</button>
+  <button class="menu-toggle" id="menu-toggle" aria-label="Abrir menú">☰</button>
 
-    <nav id="menu">
-        <a href="{{ url_for('main.index') }}">Inicio</a>
-
-        {% if session.get('usuario_id') %}
-            <a href="{{ url_for('main.dashboard') }}">Panel</a>
-            <a href="{{ url_for('profile.perfil') }}">Mi perfil</a>
-            <a href="{{ url_for('main.reservas') }}">Reservas</a>
-            <a href="{{ url_for('auth.logout') }}" class="nav-login">Salir</a>
-        {% else %}
-            <a href="{{ url_for('auth.login') }}">Iniciar sesión</a>
-            <a href="{{ url_for('auth.registro') }}" class="nav-login">Registrarme</a>
-        {% endif %}
-    </nav>
+  <nav class="nav-links" id="menu">
+    <a href="{{ url_for('main.dashboard') }}">Inicio</a>
+    <a href="{{ url_for('main.canchas') }}">Canchas</a>
+    <a href="{{ url_for('main.retos') }}">Retos</a>
+    <a href="{{ url_for('main.comunidad') }}">Comunidad</a>
+    <a href="{{ url_for('profile.perfil') }}">Perfil</a>
+    <a href="{{ url_for('auth.logout') }}">Salir</a>
+  </nav>
 </header>
 
-<main class="contenido-principal">
-
-    {% with mensajes = get_flashed_messages(with_categories=true) %}
-        {% if mensajes %}
-            <div class="mensajes">
-                {% for categoria, mensaje in mensajes %}
-                    <div class="mensaje {{ categoria }}">{{ mensaje }}</div>
-                {% endfor %}
-            </div>
-        {% endif %}
-    {% endwith %}
-
-    {% block content %}{% endblock %}
-
+<main class="container">
+  {% block content %}{% endblock %}
 </main>
 
 <footer class="footer">
-    <div class="footer-logo">ACTÍVATE + CHIMAL</div>
-    <p>Muévete, participa y transforma tu comunidad.</p>
-    <p>Proyecto escolar · Deportivo Tepalcates · Chimalhuacán</p>
+  <p>Actívate Chimal • Chimalhuacán • Hecho con 💚</p>
 </footer>
 
 <script src="{{ url_for('static', filename='js/app.js') }}"></script>
-{% block scripts %}{% endblock %}
 
 </body>
 </html>
